@@ -7,3 +7,5 @@ openai
 pandas
 supabase
 python-multipart
+requests
+beautifulsoup4
