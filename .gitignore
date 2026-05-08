@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+.env
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+
+# Logs
+*.log
+
+# FAISS / vector db
+*.faiss
+
+# Environment variables
+.env
+
+# Python cache
+.pytest_cache/
+
+# Build files
+dist/
+build/
