@@ -36,36 +36,42 @@ def fetch_html(url: str) -> BeautifulSoup | None:
 def extract_assessment_data(card_soup: BeautifulSoup) -> Dict[str, Any]:
     """
     Extracts individual assessment fields from a single HTML 'card'.
-    NOTE: These CSS selectors (e.g., 'h3', '.description') are placeholders. 
-    You will need to inspect the live SHL page and update them accordingly.
+    Updated with the actual SHL HTML structure.
     """
     # 1. Assessment Name
-    name_elem = card_soup.find("h3") # Placeholder: Adjust if the name is in a <h2> or class="title"
+    name_elem = card_soup.find("h3", class_="content-card__title")
     name = name_elem.get_text(strip=True) if name_elem else "Unknown Assessment"
 
-    # 2. URL
-    link_elem = card_soup.find("a", href=True)
-    url = link_elem["href"] if link_elem else ""
+    # 2. URL (the card itself is an <a> tag)
+    url = card_soup.get("href", "")
     # Ensure it's a full URL
     if url and url.startswith("/"):
         url = "https://www.shl.com" + url
 
     # 3. Description
-    desc_elem = card_soup.find("div", class_="description") # Placeholder
+    desc_elem = card_soup.find("div", class_="content-card__content")
     description = desc_elem.get_text(strip=True) if desc_elem else "No description available."
 
-    # 4. Remote Testing Support
-    # Placeholder logic: Check if text 'remote' or 'online' is mentioned in some features list
+    # SHL page combines features in the description, so we search the entire card text
     features_text = card_soup.get_text(strip=True).lower()
-    remote_testing_support = "remote" in features_text or "online" in features_text
+
+    # 4. Remote Testing Support
+    remote_testing_support = "remote" in features_text or "online" in features_text or "virtual" in features_text
 
     # 5. Adaptive Support
     adaptive_support = "adaptive" in features_text
 
     # 6. Test Types
-    # Placeholder logic: Find tags or badges representing test types (e.g., Cognitive, Personality)
-    type_elems = card_soup.find_all("span", class_="test-type-badge") # Placeholder
-    test_types = [elem.get_text(strip=True) for elem in type_elems] if type_elems else []
+    # SHL doesn't use standard badges on this page, we infer test type from the name/description
+    test_types = []
+    if "cognitive" in features_text: test_types.append("Cognitive")
+    if "personality" in features_text: test_types.append("Personality")
+    if "behavior" in features_text: test_types.append("Behavioral")
+    if "skill" in features_text: test_types.append("Skills")
+    
+    # Fallback if empty
+    if not test_types:
+        test_types.append("General Assessment")
 
     return {
         "assessment_name": name,
@@ -121,8 +127,10 @@ def main():
         return
     
     # 2. Find all assessment cards
-    # Placeholder: Assuming each assessment is wrapped in a div with class 'assessment-card'
-    card_elements = soup.find_all("div", class_="assessment-card") 
+    # On SHL, the assessment cards are <a> tags with class 'content-card__full-width-link'
+    card_elements = soup.find_all("a", class_="content-card__full-width-link") 
+    # Filter to ensure they are assessment links
+    card_elements = [c for c in card_elements if "/assessments/" in c.get("href", "")]
     
     if not card_elements:
         print("No assessment cards found. You may need to update the CSS selector in the script.")
