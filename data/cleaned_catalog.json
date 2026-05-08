@@ -1,0 +1,68 @@
+[
+    {
+        "assessment_name": "Behavioral Assessments",
+        "url": "https://www.shl.com/products/assessments/behavioral-assessments/",
+        "description": "Match each candidate’s behavioral fit with your role, to boost quality of hire and engagement.",
+        "test_types": [
+            "Behavioral"
+        ],
+        "remote_testing_support": false,
+        "adaptive_support": false,
+        "searchable_text": "Behavioral Assessments. Match each candidate’s behavioral fit with your role, to boost quality of hire and engagement.. Types: Behavioral"
+    },
+    {
+        "assessment_name": "Virtual Assessment & Development Centers",
+        "url": "https://www.shl.com/products/assessments/assessment-and-development-centers/",
+        "description": "Our end-to-end digital assessment and development centers provide the most efficient and accurate way of identifying potential from anywhere in the world.",
+        "test_types": [
+            "General Assessment"
+        ],
+        "remote_testing_support": true,
+        "adaptive_support": false,
+        "searchable_text": "Virtual Assessment & Development Centers. Our end-to-end digital assessment and development centers provide the most efficient and accurate way of identifying potential from anywhere in the world.. Types: General Assessment"
+    },
+    {
+        "assessment_name": "Personality Assessments",
+        "url": "https://www.shl.com/products/assessments/personality-assessment/",
+        "description": "Improve decisions with science-backed personality tests like OPQ that reveal individual preferences, motivations, and remote-work capability.",
+        "test_types": [
+            "Personality"
+        ],
+        "remote_testing_support": true,
+        "adaptive_support": false,
+        "searchable_text": "Personality Assessments. Improve decisions with science-backed personality tests like OPQ that reveal individual preferences, motivations, and remote-work capability.. Types: Personality"
+    },
+    {
+        "assessment_name": "Cognitive Assessments",
+        "url": "https://www.shl.com/products/assessments/cognitive-assessments/",
+        "description": "Measure candidates’ potential to learn, adapt, and perform in any open role with Verify, the interactive cognitive assessment.",
+        "test_types": [
+            "Cognitive"
+        ],
+        "remote_testing_support": false,
+        "adaptive_support": false,
+        "searchable_text": "Cognitive Assessments. Measure candidates’ potential to learn, adapt, and perform in any open role with Verify, the interactive cognitive assessment.. Types: Cognitive"
+    },
+    {
+        "assessment_name": "Skills and Simulations",
+        "url": "https://www.shl.com/products/assessments/skills-and-simulations/",
+        "description": "Recruit top candidates at scale with skills assessments and simulation tests that measure practical application and knowledge.",
+        "test_types": [
+            "Skills"
+        ],
+        "remote_testing_support": false,
+        "adaptive_support": false,
+        "searchable_text": "Skills and Simulations. Recruit top candidates at scale with skills assessments and simulation tests that measure practical application and knowledge.. Types: Skills"
+    },
+    {
+        "assessment_name": "Job Focused Assessments",
+        "url": "https://www.shl.com/products/assessments/job-focused-assessments/",
+        "description": "Identify best-fit candidates with focused, comprehensive online assessments that measure job-specific competencies.",
+        "test_types": [
+            "General Assessment"
+        ],
+        "remote_testing_support": true,
+        "adaptive_support": false,
+        "searchable_text": "Job Focused Assessments. Identify best-fit candidates with focused, comprehensive online assessments that measure job-specific competencies.. Types: General Assessment"
+    }
+]
