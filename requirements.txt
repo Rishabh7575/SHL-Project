@@ -9,3 +9,6 @@ supabase
 python-multipart
 requests
 beautifulsoup4
+sentence-transformers
+faiss-cpu
+numpy
