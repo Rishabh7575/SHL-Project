@@ -32,7 +32,7 @@ def process_chat(request: ChatRequest) -> ChatResponse:
         logger.info("Skipping search.")
 
     try:
-        reply = generate_chat_response(history, retrieved_assessments=raw_recs)
+        reply = generate_chat_response(history, recs=raw_recs)
     except Exception as e:
         logger.error(f"Generation error: {e}")
         reply = "I ran into an error. Please try again later."

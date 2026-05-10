@@ -15,8 +15,9 @@ def generate_search_query(history: str) -> str:
         
     prompt = (
         "You're a recruiter AI assistant. Based on this chat history, "
-        "write a short search query (max 5 words) to find assessments.\n"
-        "If they're just saying hi or want to compare existing results, return 'NO_SEARCH'.\n\n"
+        "write a short search query (max 5 words) to find relevant SHL assessments.\n"
+        "Produce a search query if the user mentions a role, skill, or asks for recommendations.\n"
+        "Return 'NO_SEARCH' only if they are just greeting you, saying thanks, or comparing items already in the chat.\n\n"
         f"--- CHAT HISTORY ---\n{history}\n\nQuery:"
     )
     
@@ -32,9 +33,13 @@ def generate_chat_response(history: str, recs: List[Dict[str, Any]] = None) -> s
         return "Based on your requirements, here are the top assessments." if recs else "Could you provide more details about the role?"
 
     instructions = (
-        "You're an expert recruiter. Be professional and concise.\n"
-        "1. ONLY discuss assessments from the RETRIEVED section or HISTORY.\n"
-        "2. Don't output JSON.\n"
+        "You are a professional technical recruiter assistant. Your goal is to help find the best SHL assessments.\n\n"
+        "RULES:\n"
+        "1. If assessments are provided in the RETRIEVED section, recommend the best matches naturally. Explain briefly why they fit.\n"
+        "2. If the RETRIEVED section is empty or no good matches exist, do NOT mention 'retrieval', 'database', or 'history'. "
+        "Instead, ask a smart follow-up question to understand the role better (e.g., seniority, specific skills, or team context).\n"
+        "3. Maintain a helpful, recruiter-friendly tone. Avoid technical or robotic internal language.\n"
+        "4. Never hallucinate assessment names. Only use what is provided or discussed.\n"
     )
 
     recs_text = "None."
