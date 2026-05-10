@@ -7,7 +7,7 @@ from typing import List, Dict, Any
 # ---------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------
-TARGET_URL = "https://www.shl.com/en/assessments/"
+BASE_URL = "https://www.shl.com/products/product-catalog/"
 OUTPUT_FILE = "data/shl_catalog.json"
 
 # We use headers so the server doesn't block us for looking like a standard bot
@@ -33,27 +33,26 @@ def fetch_html(url: str) -> BeautifulSoup | None:
         print(f"Error fetching the URL: {e}")
         return None
 
-def extract_assessment_data(card_soup: BeautifulSoup) -> Dict[str, Any]:
+def extract_assessment_data(row_soup: BeautifulSoup) -> Dict[str, Any]:
     """
-    Extracts individual assessment fields from a single HTML 'card'.
-    Updated with the actual SHL HTML structure.
+    Extracts individual assessment fields from a single HTML table row.
     """
+    link_elem = row_soup.find("a")
+    
     # 1. Assessment Name
-    name_elem = card_soup.find("h3", class_="content-card__title")
-    name = name_elem.get_text(strip=True) if name_elem else "Unknown Assessment"
+    name = link_elem.get_text(strip=True) if link_elem else "Unknown Assessment"
 
-    # 2. URL (the card itself is an <a> tag)
-    url = card_soup.get("href", "")
-    # Ensure it's a full URL
+    # 2. URL
+    url = link_elem.get("href", "") if link_elem else ""
     if url and url.startswith("/"):
         url = "https://www.shl.com" + url
 
     # 3. Description
-    desc_elem = card_soup.find("div", class_="content-card__content")
-    description = desc_elem.get_text(strip=True) if desc_elem else "No description available."
+    # The table view does not contain descriptions, so we add a placeholder.
+    description = "Description available on details page."
 
-    # SHL page combines features in the description, so we search the entire card text
-    features_text = card_soup.get_text(strip=True).lower()
+    # SHL page combines features in the table columns
+    features_text = row_soup.get_text(strip=True).lower()
 
     # 4. Remote Testing Support
     remote_testing_support = "remote" in features_text or "online" in features_text or "virtual" in features_text
@@ -62,10 +61,10 @@ def extract_assessment_data(card_soup: BeautifulSoup) -> Dict[str, Any]:
     adaptive_support = "adaptive" in features_text
 
     # 6. Test Types
-    # SHL doesn't use standard badges on this page, we infer test type from the name/description
+    # SHL uses keys like C, P, A, B in the table columns
     test_types = []
-    if "cognitive" in features_text: test_types.append("Cognitive")
-    if "personality" in features_text: test_types.append("Personality")
+    if "c" in features_text.split(): test_types.append("Cognitive")
+    if "p" in features_text.split(): test_types.append("Personality")
     if "behavior" in features_text: test_types.append("Behavioral")
     if "skill" in features_text: test_types.append("Skills")
     
@@ -121,28 +120,37 @@ def main():
     print("Starting SHL Scraper...")
     
     # 1. Fetch the page
-    soup = fetch_html(TARGET_URL)
+    soup = fetch_html(BASE_URL)
     if not soup:
         print("Failed to retrieve the webpage. Exiting.")
         return
     
     # 2. Find all assessment cards
-    # On SHL, the assessment cards are <a> tags with class 'content-card__full-width-link'
-    card_elements = soup.find_all("a", class_="content-card__full-width-link") 
-    # Filter to ensure they are assessment links
-    card_elements = [c for c in card_elements if "/assessments/" in c.get("href", "")]
+    # On SHL Product Catalog, assessments are stored in a table row <tr> with product links
+    rows = soup.find_all("tr")
+    
+    # Filter to ensure they contain actual assessment links (exclude headers)
+    card_elements = []
+    for row in rows:
+        link = row.find("a")
+        if link and ("/view/" in link.get("href", "") or "/products/" in link.get("href", "")):
+            card_elements.append(row)
     
     if not card_elements:
         print("No assessment cards found. You may need to update the CSS selector in the script.")
         return
 
-    print(f"Found {len(card_elements)} raw assessment cards. Extracting data...")
+    print(f"DEBUG: Found {len(card_elements)} matching cards (table rows).")
     
     # 3. Extract data
     assessments = []
-    for card in card_elements:
+    for i, card in enumerate(card_elements):
         data = extract_assessment_data(card)
         assessments.append(data)
+        
+        # Temporary debugging prints for sample titles
+        if i < 3:
+            print(f"DEBUG: Sample extracted title: '{data['assessment_name']}'")
         
     # 4. Remove duplicates
     unique_assessments = remove_duplicates(assessments)

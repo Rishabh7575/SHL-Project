@@ -3,12 +3,11 @@ uvicorn
 pydantic
 pydantic-settings
 python-dotenv
-openai
-pandas
-supabase
 python-multipart
 requests
 beautifulsoup4
 sentence-transformers
 faiss-cpu
 numpy
+google-genai
+streamlit

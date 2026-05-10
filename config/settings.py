@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     """
     app_name: str = "AI Recommendation System"
     environment: str = "development"
+    gemini_api_key: str = ""
     
     # Allows loading from a .env file, without crashing if it's missing
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
