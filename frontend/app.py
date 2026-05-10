@@ -77,3 +77,5 @@ if prompt := st.chat_input("E.g., Suggest assessments for a Python Developer"):
             except requests.exceptions.RequestException as e:
                 st.error(f"Error: {e}")
                 st.session_state.messages.append({"role": "assistant", "content": f"Error: {e}"})
+
+# fckkk solve the logo 
