@@ -75,3 +75,5 @@ The Streamlit interface provides a simple chat window:
 - "Do you have any cognitive ability tests that support remote proctoring?"
 - "Compare the personality assessments available in the catalog."
 - "What would be good for a leadership role in a tech team?"
+
+rebuilding it
